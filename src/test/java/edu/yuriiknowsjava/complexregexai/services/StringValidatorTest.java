@@ -14,9 +14,9 @@ class StringValidatorTest {
 
     @Test
     void stringWithSpaceCharactersIsNotValid() {
-        Stream<Executable> assertions = Stream.of(" ", "\t", " \t", "\n", "\r", "\n\r", " \r\n")
+        Stream<Executable> assertions = Stream.of(" ", "\t", " \t", "\n", "\r", "\n\r", " \r\n", "Why7? ")
                 .map(str -> () ->
-                        assertFalse(validateString(str, 10), "String should not contain any white space characters"));
+                        assertFalse(validateString(str, 10), "String should not contain any white space characters: " + str));
         assertAll(assertions);
     }
 
@@ -37,9 +37,9 @@ class StringValidatorTest {
 
     @Test
     public void testValidateString_withBoundaryCases() {
-        assertTrue(validateString("Aa1!", 4)); // Exactly maxLength
-        assertFalse(validateString("Aa1!abc", 6)); // Exceeds maxLength
-        assertFalse(validateString("", 10)); // Empty string
+        assertTrue(validateString("Aa1!", 4), "String containing all the necessary chars and has exactly max length should be valid");
+        assertFalse(validateString("Aa1!abc", 6), "String that exceeds max length is not valid");
+        assertFalse(validateString("", 10), "Empty string cannot be valid");
     }
 
     @Test
@@ -48,11 +48,5 @@ class StringValidatorTest {
                 .map(specialChar -> "Why7" + specialChar)
                 .map(str -> () -> assertTrue(validateString(str, 10), String.format("String %s should be valid", str)));
         assertAll(assertions);
-    }
-
-    @Test
-    public void testValidateString_withMaxLengthBoundary() {
-        assertTrue(validateString("Aa1@", 4)); // Exactly maxLength
-        assertFalse(validateString("Aa1@#", 4)); // Exceeds maxLength
     }
 }
