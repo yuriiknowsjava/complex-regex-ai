@@ -4,6 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringValidator {
+    private StringValidator() {
+    }
+
     public static boolean validateString(String s, int maxLength) {
         // The regex pattern explained:
         // ^: start of string
