@@ -1,7 +1,9 @@
 package edu.yuriiknowsjava.complexregexai.services;
 
+import static edu.yuriiknowsjava.complexregexai.services.StringValidator.validateString;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.stream.Stream;
 
@@ -14,10 +16,43 @@ class StringValidatorTest {
     void stringWithSpaceCharactersIsNotValid() {
         Stream<Executable> assertions = Stream.of(" ", "\t", " \t", "\n", "\r", "\n\r", " \r\n")
                 .map(str -> () ->
-                        assertFalse(
-                                StringValidator.validateString(str, 10),
-                                "String should not contain any white space characters")
-                );
+                        assertFalse(validateString(str, 10), "String should not contain any white space characters"));
         assertAll(assertions);
+    }
+
+    @Test
+    public void testValidateString_withValidStrings() {
+        assertTrue(validateString("Aa1!", 10));
+        assertTrue(validateString("AbC2#", 10));
+        assertTrue(validateString("Xyz3@abc", 10));
+    }
+
+    @Test
+    public void testValidateString_withInvalidStrings() {
+        assertFalse(validateString("aa1!", 10), "String missing an uppercase char is not valid");
+        assertFalse(validateString("AA1!", 10), "String missing a lowercase char is not valid");
+        assertFalse(validateString("Aaa!", 10), "String missing a digit char is not valid");
+        assertFalse(validateString("Aaa1", 10), "String missing a special character is not valid");
+    }
+
+    @Test
+    public void testValidateString_withBoundaryCases() {
+        assertTrue(validateString("Aa1!", 4)); // Exactly maxLength
+        assertFalse(validateString("Aa1!abc", 6)); // Exceeds maxLength
+        assertFalse(validateString("", 10)); // Empty string
+    }
+
+    @Test
+    public void testValidateString_withSpecialCharacters() {
+        Stream<Executable> assertions = Stream.of("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".split(""))
+                .map(specialChar -> "Why7" + specialChar)
+                .map(str -> () -> assertTrue(validateString(str, 10), String.format("String %s should be valid", str)));
+        assertAll(assertions);
+    }
+
+    @Test
+    public void testValidateString_withMaxLengthBoundary() {
+        assertTrue(validateString("Aa1@", 4)); // Exactly maxLength
+        assertFalse(validateString("Aa1@#", 4)); // Exceeds maxLength
     }
 }

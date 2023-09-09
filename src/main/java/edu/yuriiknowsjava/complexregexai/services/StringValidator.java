@@ -19,7 +19,7 @@ public class StringValidator {
         // $: end of string
         String patternString = String.format(
                 // language=RegExp
-                "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!\"#$%%&'()*+,-./:;<=>?@\\[\\]^_`{|}~])[\\S]{1,%d}$",
+                "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\\\!\"#$%%&'()*+,-./:;<=>?@\\[\\]^_`{|}~])[\\S]{1,%d}$",
                 maxLength
         );
         Pattern pattern = Pattern.compile(patternString);

@@ -1,0 +1,86 @@
+========================================================= QUESTION 1 =================================================================================
+Given this Java function
+```java
+public static boolean validateString(String s, int maxLength) {
+    // The regex pattern explained:
+    // ^: start of string
+    // (?=.*[A-Z]): positive lookahead, asserts there's at least one uppercase letter
+    // (?=.*[a-z]): positive lookahead, asserts there's at least one lowercase letter
+    // (?=.*\d): positive lookahead, asserts there's at least one digit
+    // (?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]): positive lookahead, asserts there's at least one special character from the list
+    // [^\s]: matches any non-whitespace character
+    // {1,maxLength}: matches between 1 and maxLength of the preceding token, which is [^\s] in this case
+    // $: end of string
+    String patternString = String.format(
+            // language=RegExp
+            "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!\"#$%%&'()*+,-./:;<=>?@\\[\\]^_`{|}~])[\\S]{1,%d}$",
+            maxLength
+    );
+    Pattern pattern = Pattern.compile(patternString);
+    Matcher matcher = pattern.matcher(s);
+    return matcher.matches();
+}
+```
+please, generate unit tests for this function
+
+
+Certainly! Below are a series of JUnit unit tests for the given `validateString` function. This includes a variety of scenarios such as:
+
+- Strings of various lengths
+- Strings with and without uppercase letters, lowercase letters, digits, and special characters
+
+```java
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class StringValidatorTest {
+
+    @Test
+    public void testValidateString_withValidStrings() {
+        assertTrue(validateString("Aa1!", 10));
+        assertTrue(validateString("AbC2#", 10));
+        assertTrue(validateString("Xyz3@abc", 10));
+    }
+
+    @Test
+    public void testValidateString_withInvalidStrings() {
+        assertFalse(validateString("aa1!", 10)); // Missing uppercase
+        assertFalse(validateString("AA1!", 10)); // Missing lowercase
+        assertFalse(validateString("Aaa!", 10)); // Missing digit
+        assertFalse(validateString("Aaa1", 10)); // Missing special character
+    }
+
+    @Test
+    public void testValidateString_withBoundaryCases() {
+        assertTrue(validateString("Aa1!", 4)); // Exactly maxLength
+        assertFalse(validateString("Aa1!abc", 6)); // Exceeds maxLength
+        assertFalse(validateString("", 10)); // Empty string
+    }
+
+    @Test
+    public void testValidateString_withWhitespace() {
+        assertFalse(validateString("Aa1 !", 10)); // Contains whitespace
+        assertFalse(validateString(" Aa1!", 10)); // Starts with whitespace
+        assertFalse(validateString("Aa1! ", 10)); // Ends with whitespace
+    }
+
+    @Test
+    public void testValidateString_withSpecialCharacters() {
+        assertTrue(validateString("Aa1@", 10));
+        assertTrue(validateString("Aa1#", 10));
+        assertTrue(validateString("Aa1$", 10));
+        // ... similarly, you can add more for all special characters ...
+    }
+
+    @Test
+    public void testValidateString_withMaxLengthBoundary() {
+        assertTrue(validateString("Aa1@", 4)); // Exactly maxLength
+        assertFalse(validateString("Aa1@#", 4)); // Exceeds maxLength
+    }
+}
+```
+
+Note that `validateString` must be available (either in the same test class or imported) for these tests to compile and run.
+
+Make sure you've included the necessary JUnit dependencies in your project. If you haven't, you can include the JUnit 5 libraries through Maven or Gradle, or whichever build tool you're using.
+======================================================================================================================================================
