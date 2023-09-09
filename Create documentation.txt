@@ -1,0 +1,99 @@
+========================================================= QUESTION 1 =================================================================================
+Write a short description for a Java application that consist only of this class
+
+```java
+public class StringValidator {
+    private StringValidator() {
+    }
+
+    public static boolean validateString(String s, int maxLength) {
+        // The regex pattern explained:
+        // ^: start of string
+        // (?=.*[A-Z]): positive lookahead, asserts there's at least one uppercase letter
+        // (?=.*[a-z]): positive lookahead, asserts there's at least one lowercase letter
+        // (?=.*\d): positive lookahead, asserts there's at least one digit
+        // (?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]): positive lookahead, asserts there's at least one special character from the list
+        // [^\s]: matches any non-whitespace character
+        // {1,maxLength}: matches between 1 and maxLength of the preceding token, which is [^\s] in this case
+        // $: end of string
+        String patternString = String.format(
+                // language=RegExp
+                "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\\\!\"#$%%&'()*+,-./:;<=>?@\\[\\]^_`{|}~])[\\S]{1,%d}$",
+                maxLength
+        );
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(s);
+        return matcher.matches();
+    }
+}
+```
+
+
+**StringValidator Java Application Description**
+
+The `StringValidator` class is a utility designed to validate the content of a given string based on specific criteria. It ensures that the input string meets the following conditions:
+
+1. Contains at least one uppercase letter.
+2. Contains at least one lowercase letter.
+3. Contains at least one digit.
+4. Contains at least one special character from the set `!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~`.
+5. Does not contain any whitespace characters.
+6. Has a length that is between 1 and a specified `maxLength`.
+
+The class is designed with a private constructor to prevent instantiation and offers a single static method, `validateString`, which checks if a given string matches the aforementioned criteria. If the input string meets all these conditions, the method returns `true`; otherwise, it returns `false`.
+
+To use this class, one would simply call the static method with the desired string and maximum length to check its validity against the specified rules.
+======================================================================================================================================================
+
+
+
+
+========================================================= QUESTION 2 =================================================================================
+Please, describe the regular expression used in this method
+```java
+public static boolean validateString(String s, int maxLength) {
+    String patternString = String.format(
+            // language=RegExp
+            "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\\\!\"#$%%&'()*+,-./:;<=>?@\\[\\]^_`{|}~])[\\S]{1,%d}$",
+            maxLength
+    );
+    Pattern pattern = Pattern.compile(patternString);
+    Matcher matcher = pattern.matcher(s);
+    return matcher.matches();
+}
+```
+
+
+Of course! Let's break down the regular expression used in the `validateString` method:
+
+The regular expression is:
+```
+^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\\!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[\S]{1,maxLength}$
+```
+Where `maxLength` is a placeholder that gets replaced with the `maxLength` parameter value from the `validateString` method.
+
+Here's the breakdown:
+
+1. `^`: This asserts the start of a line. The pattern that follows should match right from the beginning of the string.
+
+2. `(?=.*[A-Z])`: This is a positive lookahead. It asserts that what directly follows is anywhere in the string, there is at least one uppercase letter. It doesn't consume characters in the string, but only asserts whether a match is possible or not.
+
+3. `(?=.*[a-z])`: Another positive lookahead. It asserts that somewhere in the string, there is at least one lowercase letter.
+
+4. `(?=.*\d)`: Another positive lookahead. It asserts that somewhere in the string, there is at least one digit.
+
+5. `(?=.*[\\!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])`: Yet another positive lookahead. It checks that the string contains at least one special character from the defined set. Note that certain characters are double escaped, like `\\` because of the Java string format.
+
+6. `[\S]{1,maxLength}`: This is the main pattern. `[\S]` matches any non-whitespace character. `{1,maxLength}` ensures that what it matches is between 1 and `maxLength` characters in length. So this part of the pattern matches a sequence of non-whitespace characters whose length is between 1 and `maxLength`.
+
+7. `$`: This asserts the end of a line. The pattern that precedes should match right until the end of the string.
+
+In essence, this regex will check if a string:
+
+- Starts with the beginning of a line (`^`).
+- Has at least one uppercase letter, one lowercase letter, one digit, and one of the specified special characters (the various lookaheads).
+- Consists only of non-whitespace characters and is between 1 and `maxLength` characters long.
+- Ends with the end of a line (`$`).
+
+If a string meets all these criteria, the `matcher.matches()` method will return `true`. Otherwise, it'll return `false`.
+======================================================================================================================================================
