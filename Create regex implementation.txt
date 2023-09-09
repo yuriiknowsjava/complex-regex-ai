@@ -1,0 +1,77 @@
+========================================================= QUESTION 1 =================================================================================
+Compose a function with a single regular expression that successfully meets requirements below:
+
+- This regular expression should validate the maximum string length (passed as parameter); it should return a match if the string length is within the acceptable range and a non-match if it is not.
+
+- This regular expression should also validate that the string contains at least one uppercase letter, one lowercase letter, one digit, and one special character from a predefined list: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~. It should return a match if the criteria are met and a non-match if they are not.
+
+- This regular expression should validate that the string does not contain any whitespace characters (spaces, tabs, or newlines). This should return a non-match if any whitespace characters are found.
+
+
+You can use positive lookaheads in the regex to ensure each of the individual criteria are met. The maximum string length can be checked using the standard quantifier. Here's how you could write a Python function to achieve this:
+
+```python
+import re
+
+def validate_string(s, max_length):
+    # The regex pattern explained:
+    # ^: start of string
+    # (?=.*[A-Z]): positive lookahead, asserts there's at least one uppercase letter
+    # (?=.*[a-z]): positive lookahead, asserts there's at least one lowercase letter
+    # (?=.*\d): positive lookahead, asserts there's at least one digit
+    # (?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]): positive lookahead, asserts there's at least one special character from the list
+    # [^\s]: matches any non-whitespace character
+    # {1,max_length}: matches between 1 and max_length of the preceding token, which is [^\s] in this case
+    # $: end of string
+    pattern = f"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!\"#$%&'()*+,-./:;<=>?@[\]^_`{{|}}~])[^\s]{{1,{max_length}}}$"
+
+    return bool(re.match(pattern, s))
+
+# Example usage:
+s = "Aa1!"
+print(validate_string(s, 10))  # True, because it's within length and meets all criteria
+```
+
+This function will return `True` if the string meets all the criteria, and `False` otherwise. Adjust the `max_length` parameter as needed.
+======================================================================================================================================================
+
+
+
+
+========================================================= QUESTION 2 =================================================================================
+Compose the same function but it Java
+
+
+Certainly! Here's the equivalent Java function that uses the `Pattern` and `Matcher` classes from the `java.util.regex` package:
+
+```java
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+public class StringValidator {
+    public static boolean validateString(String s, int max_length) {
+        // The regex pattern explained:
+        // ^: start of string
+        // (?=.*[A-Z]): positive lookahead, asserts there's at least one uppercase letter
+        // (?=.*[a-z]): positive lookahead, asserts there's at least one lowercase letter
+        // (?=.*\d): positive lookahead, asserts there's at least one digit
+        // (?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]): positive lookahead, asserts there's at least one special character from the list
+        // [^\s]: matches any non-whitespace character
+        // {1,max_length}: matches between 1 and max_length of the preceding token, which is [^\s] in this case
+        // $: end of string
+        String patternString = String.format("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!\"#$%%&'()*+,-./:;<=>?@\\[\\]^_`{|}~])[\\S]{1,%d}$", max_length);
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(s);
+
+        return matcher.matches();
+    }
+
+    public static void main(String[] args) {
+        String s = "Aa1!";
+        System.out.println(validateString(s, 10));  // True, because it's within length and meets all criteria
+    }
+}
+```
+
+You can now use the `validateString` method to validate your strings in Java.
+======================================================================================================================================================
