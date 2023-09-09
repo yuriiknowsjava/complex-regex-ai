@@ -12,7 +12,7 @@
     <artifactId>complex-regex-ai</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>complex-regex-ai</name>
-    <description>complex-regex-ai</description>
+    <description>complex regex ai</description>
     <properties>
         <java.version>11</java.version>
         <testcontainers.version>1.18.3</testcontainers.version>
