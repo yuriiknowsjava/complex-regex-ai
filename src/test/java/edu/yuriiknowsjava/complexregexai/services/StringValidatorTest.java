@@ -60,4 +60,17 @@ class StringValidatorTest {
         var notAllowedChar = "©";
         assertFalse(validateString("Why7" + notAllowedChar, 10), "String cannot contain " + notAllowedChar);
     }
+
+    @Test
+    void testValidateString_variousPositions() {
+        Stream<Executable> variousCombinationAssertions = Stream.of(
+                        "Yf6&", "Yf&6", "Y6f&", "Y6&f",
+                        "Y&f6", "Y&6f", "fY6&", "fY&6", "f6Y&",
+                        "f6&Y", "f&Y6", "f&6Y", "6Yf&", "6Y&f",
+                        "6fY&", "6f&Y", "6&Yf", "6&fY", "&Yf6",
+                        "&Y6f", "&fY6", "&f6Y", "&6Yf", "&6fY"
+                )
+                .map(str -> () -> assertTrue(validateString(str, 7), String.format("String %s is supposed to be valid", str)));
+        assertAll(variousCombinationAssertions);
+    }
 }

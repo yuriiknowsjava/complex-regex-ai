@@ -84,3 +84,58 @@ Note that `validateString` must be available (either in the same test class or i
 
 Make sure you've included the necessary JUnit dependencies in your project. If you haven't, you can include the JUnit 5 libraries through Maven or Gradle, or whichever build tool you're using.
 ======================================================================================================================================================
+
+
+
+
+========================================================= QUESTION 2 =================================================================================
+Given a list of ("Y", "f", "6", "&"), provide me with all possible string combinations
+
+
+Given the list of characters `("Y", "f", "6", "&")`, there are several ways you can generate combinations of these characters:
+
+1. Single character combinations (4 combinations): "Y", "f", "6", "&".
+2. Two character combinations (12 combinations): "Yf", "Y6", "Y&", "fY", "f6", "f&", "6Y", "6f", "6&", "&Y", "&f", "&6".
+3. Three character combinations (24 combinations): "Yf6", "Yf&", "Y6f", "Y6&", "Y&f", "Y&6", "fY6", "fY&", "f6Y", "f6&", "f&Y", "f&6", "6Yf", "6Y&", "6fY", "6f&", "6&Y", "6&f", "&Yf", "&Y6", "&fY", "&f6", "&6Y", "&6f".
+4. Four character combinations (24 combinations): "Yf6&", "Yf&6", "Y6f&", "Y6&f", "Y&f6", "Y&6f", "fY6&", "fY&6", "f6Y&", "f6&Y", "f&Y6", "f&6Y", "6Yf&", "6Y&f", "6fY&", "6f&Y", "6&Yf", "6&fY", "&Yf6", "&Y6f", "&fY6", "&f6Y", "&6Yf", "&6fY".
+
+The total number of combinations is 4 (single) + 12 (double) + 24 (triple) + 24 (quadruple) = 64 combinations.
+
+Here's a simple Java program to generate all the combinations:
+
+```java
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class CombinationGenerator {
+    public static void main(String[] args) {
+        List<String> elements = Arrays.asList("Y", "f", "6", "&");
+        List<String> combinations = new ArrayList<>();
+
+        for (int length = 1; length <= elements.size(); length++) {
+            generateCombinations(elements, "", length, combinations);
+        }
+
+        for (String combination : combinations) {
+            System.out.println(combination);
+        }
+
+        System.out.println("Total combinations: " + combinations.size());
+    }
+
+    private static void generateCombinations(List<String> elements, String current, int length, List<String> combinations) {
+        if (current.length() == length) {
+            combinations.add(current);
+            return;
+        }
+
+        for (String element : elements) {
+            generateCombinations(elements, current + element, length, combinations);
+        }
+    }
+}
+```
+
+This program will output all 64 combinations as expected.
+======================================================================================================================================================
