@@ -44,7 +44,7 @@ Here's the breakdown:
 
 4. `(?=.*\d)`: Another positive lookahead. It asserts that somewhere in the string, there is at least one digit.
 
-5. `(?=.*[\\!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])`: Yet another positive lookahead. It checks that the string contains at least one special character from the defined set. Note that certain characters are double escaped, like `\\` because of the Java string format.
+5. ```(?=.*[\\!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])```: Yet another positive lookahead. It checks that the string contains at least one special character from the defined set. Note that certain characters are double escaped, like `\\` because of the Java string format.
 
 6. `[\S]{1,maxLength}`: This is the main pattern. `[\S]` matches any non-whitespace character. `{1,maxLength}` ensures that what it matches is between 1 and `maxLength` characters in length. So this part of the pattern matches a sequence of non-whitespace characters whose length is between 1 and `maxLength`.
 
